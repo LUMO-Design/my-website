@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMO Design & Systems | 京都発 Web開発 & システムインテグレーション</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Noto+Sans+JP:wght@200;400;500;700&family=Noto+Serif+JP:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-deep: #0a0a0c;
+  --bg-dark: #111114;
+  --bg-card: #18181c;
+  --bg-card-hover: #1e1e24;
+  --gold-warm: #c9a84c;
+  --gold-light: #e8d48b;
+  --gold-glow: rgba(201, 168, 76, 0.15);
+  --gold-subtle: rgba(201, 168, 76, 0.08);
+  --text-primary: #e8e4dc;
+  --text-secondary: #9a9590;
+  --text-muted: #5c5854;
+  --accent-kyoto: #8b4c3a;
+  --accent-nature: #4a6741;
+  --font-display: 'Cormorant Garamond', serif;
+  --font-ja: 'Noto Serif JP', serif;
+  --font-body: 'Noto Sans JP', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  line-height: 1.8;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--gold-warm); border-radius: 2px; }
+
+/* ============ NAVIGATION ============ */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.5s ease;
+  backdrop-filter: blur(20px);
+  background: rgba(10, 10, 12, 0.7);
+  border-bottom: 1px solid rgba(201, 168, 76, 0.05);
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 300;
+  letter-spacing: 0.35em;
+  color: var(--gold-warm);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.nav-logo .logo-mark {
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--gold-warm);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-logo .logo-mark::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: var(--gold-warm);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--gold-warm), 0 0 24px rgba(201, 168, 76, 0.3);
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  font-weight: 400;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold-warm);
+  transition: width 0.3s;
+}
+
+.nav-links a:hover { color: var(--gold-warm); }
+.nav-links a:hover::after { width: 100%; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.hamburger span {
+  width: 24px;
+  height: 1.5px;
+  background: var(--gold-warm);
+  transition: 0.3s;
+}
+
+/* ============ HERO ============ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 50%, rgba(201, 168, 76, 0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 80% 30%, rgba(139, 76, 58, 0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 40% at 50% 100%, rgba(74, 103, 65, 0.03) 0%, transparent 70%);
+}
+
+/* Floating particles */
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--gold-warm);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+
+@keyframes particleFloat {
+  0% { opacity: 0; transform: translateY(100vh) scale(0); }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+}
+
+.hero-content {
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  padding: 0 2rem;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  letter-spacing: 0.4em;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  font-weight: 400;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.3s forwards;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: var(--gold-warm);
+  line-height: 1.1;
+  margin-bottom: 0.3em;
+  opacity: 0;
+  animation: fadeUp 1.2s ease 0.5s forwards;
+  text-shadow: 0 0 60px rgba(201, 168, 76, 0.2);
+}
+
+.hero-subtitle {
+  font-family: var(--font-ja);
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
+  font-weight: 300;
+  color: var(--text-secondary);
+  letter-spacing: 0.25em;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.8s forwards;
+}
+
+.hero-tagline {
+  font-family: var(--font-ja);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  line-height: 2;
+  max-width: 500px;
+  margin: 0 auto 3rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 1s forwards;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 2.5rem;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  color: var(--gold-warm);
+  text-decoration: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  transition: all 0.4s;
+  opacity: 0;
+  animation: fadeUp 1s ease 1.2s forwards;
+}
+
+.hero-cta:hover {
+  background: rgba(201, 168, 76, 0.1);
+  border-color: var(--gold-warm);
+  box-shadow: 0 0 30px rgba(201, 168, 76, 0.1);
+}
+
+.hero-cta svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s;
+}
+
+.hero-cta:hover svg { transform: translateX(4px); }
+
+.hero-scroll {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  opacity: 0;
+  animation: fadeUp 1s ease 1.5s forwards;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold-warm), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ SECTION COMMON ============ */
+section {
+  padding: 8rem 3rem;
+  position: relative;
+}
+
+.section-label {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.4em;
+  color: var(--gold-warm);
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.section-title {
+  font-family: var(--font-ja);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 300;
+  margin-bottom: 1rem;
+  letter-spacing: 0.08em;
+  line-height: 1.6;
+}
+
+.section-desc {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  max-width: 600px;
+  line-height: 2;
+  letter-spacing: 0.03em;
+}
+
+/* Decorative line */
+.deco-line {
+  width: 40px;
+  height: 1px;
+  background: var(--gold-warm);
+  margin: 2rem 0;
+  opacity: 0.5;
+}
+
+/* ============ PHILOSOPHY ============ */
+.philosophy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 50% 50% at 50% 50%, var(--gold-subtle), transparent);
+}
+
+.philosophy-inner {
+  max-width: 700px;
+}
+
+.philosophy .kanji {
+  font-family: var(--font-ja);
+  font-size: clamp(4rem, 8vw, 7rem);
+  font-weight: 700;
+  color: rgba(201, 168, 76, 0.08);
+  line-height: 1;
+  margin-bottom: -1rem;
+  letter-spacing: 0.3em;
+}
+
+.philosophy blockquote {
+  font-family: var(--font-ja);
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  font-weight: 300;
+  line-height: 2.2;
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+  margin-bottom: 2rem;
+}
+
+.philosophy cite {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: normal;
+  letter-spacing: 0.15em;
+}
+
+/* ============ ABOUT ============ */
+.about {
+  background: var(--bg-dark);
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.about-visual {
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-visual .year-badge {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 10rem;
+  font-weight: 300;
+  color: rgba(201, 168, 76, 0.04);
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.about-visual .circle-deco {
+  width: 250px;
+  height: 250px;
+  border: 1px solid rgba(201, 168, 76, 0.1);
+  border-radius: 50%;
+  position: relative;
+  animation: slowRotate 30s linear infinite;
+}
+
+.about-visual .circle-deco::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--gold-warm);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--gold-warm);
+}
+
+.about-visual .circle-deco::after {
+  content: '20th';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--gold-warm);
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.about-stats {
+  display: flex;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.stat {
+  text-align: left;
+}
+
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: var(--gold-warm);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-top: 0.3rem;
+}
+
+/* ============ SERVICES ============ */
+.services {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.services-header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.service-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(201, 168, 76, 0.06);
+  padding: 2.5rem 2rem;
+  transition: all 0.5s cubic-bezier(0.25, 0, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-warm), transparent);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.service-card:hover {
+  background: var(--bg-card-hover);
+  border-color: rgba(201, 168, 76, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.service-card:hover::before { opacity: 1; }
+
+.service-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  color: var(--gold-warm);
+}
+
+.service-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--gold-warm);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.service-name {
+  font-family: var(--font-ja);
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.service-en {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--gold-warm);
+  opacity: 0.5;
+  margin-bottom: 1rem;
+}
+
+.service-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.9;
+}
+
+/* ============ EXPERTISE ============ */
+.expertise {
+  background: var(--bg-dark);
+  overflow: hidden;
+}
+
+.expertise-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.tech-marquee {
+  margin-top: 4rem;
+  overflow: hidden;
+  mask: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+  -webkit-mask: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+}
+
+.tech-track {
+  display: flex;
+  gap: 3rem;
+  animation: marquee 25s linear infinite;
+  width: max-content;
+}
+
+.tech-item {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding: 0.6rem 1.5rem;
+  border: 1px solid rgba(201, 168, 76, 0.08);
+  transition: all 0.3s;
+}
+
+.tech-item:hover {
+  color: var(--gold-warm);
+  border-color: rgba(201, 168, 76, 0.3);
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.expertise-areas {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.expertise-item {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.expertise-item .number {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--gold-warm);
+  opacity: 0.3;
+  margin-bottom: 1rem;
+}
+
+.expertise-item h4 {
+  font-family: var(--font-ja);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+  letter-spacing: 0.05em;
+}
+
+.expertise-item p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+/* ============ IoT SECTION ============ */
+.iot-section {
+  position: relative;
+  background:
+    radial-gradient(ellipse 60% 40% at 30% 60%, rgba(74, 103, 65, 0.08) 0%, transparent 70%),
+    var(--bg-deep);
+}
+
+.iot-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.iot-visual {
+  position: relative;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iot-network {
+  position: relative;
+  width: 280px;
+  height: 280px;
+}
+
+.iot-node {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--accent-nature);
+  border-radius: 50%;
+  background: var(--bg-deep);
+}
+
+.iot-node::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  background: var(--accent-nature);
+  border-radius: 50%;
+  animation: nodePulse 2s ease-in-out infinite;
+}
+
+.iot-node:nth-child(1) { top: 0; left: 50%; animation-delay: 0s; }
+.iot-node:nth-child(2) { top: 25%; right: 5%; animation-delay: 0.3s; }
+.iot-node:nth-child(3) { bottom: 15%; right: 10%; animation-delay: 0.6s; }
+.iot-node:nth-child(4) { bottom: 5%; left: 35%; animation-delay: 0.9s; }
+.iot-node:nth-child(5) { top: 30%; left: 5%; animation-delay: 1.2s; }
+
+.iot-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  border: 1.5px solid rgba(74, 103, 65, 0.4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iot-center::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle, var(--accent-nature), transparent);
+  border-radius: 50%;
+  animation: centerGlow 3s ease-in-out infinite;
+}
+
+@keyframes nodePulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; box-shadow: 0 0 8px var(--accent-nature); }
+}
+
+@keyframes centerGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.iot-features {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.iot-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.iot-feature-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-nature);
+  border-radius: 50%;
+  margin-top: 0.6rem;
+  flex-shrink: 0;
+}
+
+.iot-feature-text h5 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.iot-feature-text p {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ============ CONTACT ============ */
+.contact {
+  text-align: center;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 80%, rgba(201, 168, 76, 0.04) 0%, transparent 70%);
+}
+
+.contact-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--gold-warm);
+  margin-bottom: 1.5rem;
+  text-shadow: 0 0 40px rgba(201, 168, 76, 0.15);
+}
+
+.contact-sub {
+  font-family: var(--font-ja);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 3rem;
+  letter-spacing: 0.1em;
+}
+
+.contact-links {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 2rem;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  transition: all 0.4s;
+}
+
+.contact-link:hover {
+  background: rgba(201, 168, 76, 0.08);
+  border-color: var(--gold-warm);
+  color: var(--gold-warm);
+}
+
+.contact-link svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+}
+
+/* ============ FOOTER ============ */
+footer {
+  padding: 3rem;
+  border-top: 1px solid rgba(201, 168, 76, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-brand {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  letter-spacing: 0.25em;
+  color: var(--gold-warm);
+  opacity: 0.5;
+}
+
+.footer-info {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-align: right;
+  line-height: 1.8;
+}
+
+/* ============ SCROLL ANIMATIONS ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.25, 0, 0.25, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1024px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+  .expertise-areas { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 1rem 1.5rem; }
+  
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgba(10, 10, 12, 0.95);
+    backdrop-filter: blur(20px);
+    padding: 2rem;
+    gap: 1.5rem;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+  }
+
+  section { padding: 5rem 1.5rem; }
+
+  .about-grid,
+  .iot-grid { grid-template-columns: 1fr; gap: 3rem; }
+
+  .about-visual { height: 250px; }
+
+  .services-grid { grid-template-columns: 1fr; }
+  
+  .expertise-areas { grid-template-columns: 1fr 1fr; }
+
+  .about-stats { gap: 2rem; }
+
+  footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-info { text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { letter-spacing: 0.1em; }
+  .contact-links { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="logo-mark"></span>
+    LUMO
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#philosophy">理念</a></li>
+    <li><a href="#about">会社概要</a></li>
+    <li><a href="#services">事業内容</a></li>
+    <li><a href="#expertise">技術</a></li>
+    <li><a href="#iot">農業IoT</a></li>
+    <li><a href="#contact">お問い合わせ</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">KYOTO — SINCE 2005</p>
+    <h1 class="hero-title">LUMO</h1>
+    <p class="hero-subtitle">Design & Systems</p>
+    <p class="hero-tagline">
+      光のように、確かな技術で<br>
+      ビジネスの未来を照らす。<br>
+      京都から、二十年の信頼と革新を。
+    </p>
+    <a href="#contact" class="hero-cta">
+      お問い合わせ
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    SCROLL
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- Philosophy -->
+<section class="philosophy" id="philosophy">
+  <div class="philosophy-inner reveal">
+    <div class="kanji">光</div>
+    <blockquote>
+      技術は手段であり、目的は人の営みを照らすこと。<br>
+      二十年、変わらぬ信念で歩み続ける。
+    </blockquote>
+    <div class="deco-line" style="margin: 2rem auto;"></div>
+    <cite>— LUMO Design & Systems 代表</cite>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about" id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <span class="year-badge">20</span>
+      <div class="circle-deco"></div>
+    </div>
+    <div class="reveal">
+      <span class="section-label">ABOUT US</span>
+      <h2 class="section-title">京都を拠点に、<br>確かな技術を届ける。</h2>
+      <div class="deco-line"></div>
+      <p class="section-desc">
+        LUMO Design & Systemsは、京都を拠点にWeb開発・システムインテグレーションを手がける技術会社です。
+        Web制作・システム開発・サーバー構築・データベース設計・ネットワーク・IoTまで、
+        企画から運用まで一貫して対応できるフルスタックな技術力が強みです。
+        20年にわたる幅広い実績と信頼で、お客様のビジネスを支えます。
+      </p>
+      <div class="about-stats">
+        <div class="stat">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">YEARS</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">6+</div>
+          <div class="stat-label">専門領域</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number">∞</div>
+          <div class="stat-label">PASSION</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="services" id="services">
+  <div class="services-header reveal">
+    <span class="section-label">SERVICES</span>
+    <h2 class="section-title">事業内容</h2>
+    <div class="deco-line" style="margin: 1.5rem auto;"></div>
+    <p class="section-desc" style="margin: 0 auto;">
+      Webの企画・制作から、サーバー構築、IoTシステム開発まで。<br>
+      幅広い技術力で、最適なソリューションをご提案します。
+    </p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+      </div>
+      <div class="service-en">WEB DIRECTION & PRODUCTION</div>
+      <h3 class="service-name">Webディレクション・制作</h3>
+      <p class="service-desc">
+        企画立案から設計、デザイン、実装、公開後の運用まで。ビジネスの目的を理解し、成果につながるWebサイト・Webシステムを構築します。
+      </p>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg>
+      </div>
+      <div class="service-en">SYSTEM DEVELOPMENT</div>
+      <h3 class="service-name">システム開発</h3>
+      <p class="service-desc">
+        PHP・データベースを中心としたWebアプリケーション開発。WordPress構築、EC連携、業務システムなど、要件に応じた最適な設計を行います。
+      </p>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </div>
+      <div class="service-en">SERVER & NETWORK</div>
+      <h3 class="service-name">サーバー・ネットワーク構築</h3>
+      <p class="service-desc">
+        Linux環境でのサーバー構築・運用管理。Nginx / Apache設定、リバースプロキシ、SSL、DNS管理など、安定稼働を実現するインフラ設計。
+      </p>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+      </div>
+      <div class="service-en">DATABASE DESIGN</div>
+      <h3 class="service-name">データベース設計・運用</h3>
+      <p class="service-desc">
+        20年の実務経験に基づく、パフォーマンスとスケーラビリティを考慮した設計。データ移行・チューニング・運用最適化もお任せください。
+      </p>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="service-en">AGRICULTURAL IoT</div>
+      <h3 class="service-name">農業IoTソリューション</h3>
+      <p class="service-desc">
+        ESP32・LoRaメッシュネットワーク・太陽光電源を活用した、圃場の環境モニタリングと自動灌漑システム。自然農の現場から生まれた実践的な技術。
+      </p>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      </div>
+      <div class="service-en">CONSULTING</div>
+      <h3 class="service-name">IT・DXコンサルティング</h3>
+      <p class="service-desc">
+        20年の知見を活かし、技術選定から運用設計まで、お客様のIT課題を総合的にサポート。地方・農業分野のDX推進もご相談ください。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Expertise -->
+<section class="expertise" id="expertise">
+  <div class="expertise-content">
+    <div class="reveal" style="text-align: center;">
+      <span class="section-label">TECHNOLOGY</span>
+      <h2 class="section-title">技術スタック</h2>
+    </div>
+
+    <div class="tech-marquee">
+      <div class="tech-track">
+        <span class="tech-item">PHP</span>
+        <span class="tech-item">MySQL</span>
+        <span class="tech-item">PostgreSQL</span>
+        <span class="tech-item">WordPress</span>
+        <span class="tech-item">Nginx</span>
+        <span class="tech-item">Linux</span>
+        <span class="tech-item">Rocky Linux</span>
+        <span class="tech-item">JavaScript</span>
+        <span class="tech-item">HTML / CSS</span>
+        <span class="tech-item">Python</span>
+        <span class="tech-item">ESP32</span>
+        <span class="tech-item">LoRa / Meshtastic</span>
+        <span class="tech-item">MQTT</span>
+        <span class="tech-item">Docker</span>
+        <span class="tech-item">Git</span>
+        <span class="tech-item">Apache</span>
+        <!-- Duplicate for seamless loop -->
+        <span class="tech-item">PHP</span>
+        <span class="tech-item">MySQL</span>
+        <span class="tech-item">PostgreSQL</span>
+        <span class="tech-item">WordPress</span>
+        <span class="tech-item">Nginx</span>
+        <span class="tech-item">Linux</span>
+        <span class="tech-item">Rocky Linux</span>
+        <span class="tech-item">JavaScript</span>
+        <span class="tech-item">HTML / CSS</span>
+        <span class="tech-item">Python</span>
+        <span class="tech-item">ESP32</span>
+        <span class="tech-item">LoRa / Meshtastic</span>
+        <span class="tech-item">MQTT</span>
+        <span class="tech-item">Docker</span>
+        <span class="tech-item">Git</span>
+        <span class="tech-item">Apache</span>
+      </div>
+    </div>
+
+    <div class="expertise-areas">
+      <div class="expertise-item reveal">
+        <div class="number">01</div>
+        <h4>ネットワーク</h4>
+        <p>設計・構築から<br>トラブルシュートまで</p>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="number">02</div>
+        <h4>データベース</h4>
+        <p>大規模データの<br>設計・チューニング・運用</p>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="number">03</div>
+        <h4>Web開発</h4>
+        <p>フルスタック対応。<br>企画から運用まで一貫</p>
+      </div>
+      <div class="expertise-item reveal">
+        <div class="number">04</div>
+        <h4>IoT・電子工作</h4>
+        <p>マイコン制御、センサー、<br>通信システム構築</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IoT Section -->
+<section class="iot-section" id="iot">
+  <div class="iot-grid">
+    <div class="reveal">
+      <span class="section-label">AGRICULTURAL IoT</span>
+      <h2 class="section-title">自然農 × テクノロジー</h2>
+      <div class="deco-line"></div>
+      <p class="section-desc">
+        滋賀・高島の自然農の現場で培った、実践的な農業IoTソリューション。
+        自然の営みを最先端技術で支える、新しい農のかたち。
+      </p>
+      <div class="iot-features">
+        <div class="iot-feature">
+          <div class="iot-feature-dot"></div>
+          <div class="iot-feature-text">
+            <h5>環境モニタリング</h5>
+            <p>土壌水分・温湿度・照度をリアルタイム計測</p>
+          </div>
+        </div>
+        <div class="iot-feature">
+          <div class="iot-feature-dot"></div>
+          <div class="iot-feature-text">
+            <h5>LoRaメッシュ通信</h5>
+            <p>Meshtasticによる広域・低消費電力ネットワーク</p>
+          </div>
+        </div>
+        <div class="iot-feature">
+          <div class="iot-feature-dot"></div>
+          <div class="iot-feature-text">
+            <h5>自動灌漑制御</h5>
+            <p>センサーデータに基づく最適な水管理</p>
+          </div>
+        </div>
+        <div class="iot-feature">
+          <div class="iot-feature-dot"></div>
+          <div class="iot-feature-text">
+            <h5>太陽光独立電源</h5>
+            <p>オフグリッドで稼働するサステナブル設計</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="iot-visual reveal">
+      <div class="iot-network">
+        <div class="iot-node"></div>
+        <div class="iot-node"></div>
+        <div class="iot-node"></div>
+        <div class="iot-node"></div>
+        <div class="iot-node"></div>
+        <div class="iot-center"></div>
+        <svg width="100%" height="100%" style="position:absolute;top:0;left:0;pointer-events:none;">
+          <line x1="50%" y1="5%" x2="50%" y2="50%" stroke="rgba(74,103,65,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="90%" y1="28%" x2="50%" y2="50%" stroke="rgba(74,103,65,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="85%" y1="80%" x2="50%" y2="50%" stroke="rgba(74,103,65,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="38%" y1="92%" x2="50%" y2="50%" stroke="rgba(74,103,65,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="8%" y1="33%" x2="50%" y2="50%" stroke="rgba(74,103,65,0.15)" stroke-width="1" stroke-dasharray="4,4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="contact" id="contact">
+  <div class="reveal">
+    <span class="section-label">CONTACT</span>
+    <h2 class="contact-title">Get in Touch</h2>
+    <p class="contact-sub">お気軽にお問い合わせください</p>
+    <div class="contact-links">
+      <a href="mailto:fujiwara@lumodesign.jp" class="contact-link">
+        <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22,4 12,13 2,4"/></svg>
+        fujiwara@lumodesign.jp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-brand">LUMO</div>
+  <div class="footer-info">
+    LUMO Design & Systems<br>
+    fujiwara@lumodesign.jp ｜ © 2005 - 2026 All Rights Reserved
+  </div>
+</footer>
+
+<script>
+// Particles
+const particlesEl = document.getElementById('particles');
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (8 + Math.random() * 12) + 's';
+  p.style.animationDelay = Math.random() * 10 + 's';
+  p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+  particlesEl.appendChild(p);
+}
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, i * 100);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+
+// Smooth nav background
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  const scroll = window.scrollY;
+  if (scroll > 100) {
+    nav.style.background = 'rgba(10, 10, 12, 0.92)';
+    nav.style.borderBottomColor = 'rgba(201, 168, 76, 0.1)';
+  } else {
+    nav.style.background = 'rgba(10, 10, 12, 0.7)';
+    nav.style.borderBottomColor = 'rgba(201, 168, 76, 0.05)';
+  }
+  lastScroll = scroll;
+});
+
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+</script>
+
+</body>
+</html>
